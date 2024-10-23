@@ -23,8 +23,7 @@ containers:
   image: bitnami/kubectl:latest
   tags: latest
   command:
-    - "bash"
-    - "/scripts/pod-manager.sh"
+    - "[/bin/sh -c /scripts/pod-manager.sh]"
   ports:
     containerPort: 80 # This should be the port your app listens on (http : 80, https : 443)
   volumeMounts:

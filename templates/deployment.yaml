@@ -31,8 +31,7 @@ spec:
           {{- if .Values.podManager.enabled }}
           {{- if .Values.containers.command }}
           command: 
-          - {{ .Values.containers.commandArgs.shell }}
-          - {{ .Values.containers.commandArgs.script }}
+          - {{ .Values.containers.command }}
           {{- end }}
           env:
             - name: NAMESPACE

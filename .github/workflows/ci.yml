@@ -12,6 +12,7 @@ permissions:
   contents: write
   packages: write  # Allows pushing images to the GitHub Container Registry
 
+jobs:
   release-chart:
     needs: pods-manager-image
     runs-on: ubuntu-latest

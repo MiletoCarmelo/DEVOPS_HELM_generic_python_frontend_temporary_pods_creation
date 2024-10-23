@@ -1,40 +1,45 @@
+# templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ .Values.module }}-{{ .Values.k8s.component }}-deployment
   labels:
-    {{-  include "label-generator" . | nindent 4 }}
-  name: {{ .Values.module }}-deployment
+    {{- include "label-generator" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.k8s.component }}
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.replicas | default 1 }}
   selector:
     matchLabels:
-      app: {{ .Values.module }}-pods
+      app: {{ .Values.module }}-{{ .Values.k8s.component }}-pods
   template:
     metadata:
       labels:
-        app: {{ .Values.module }}-pods
+        app: {{ .Values.module }}-{{ .Values.k8s.component }}-pods
+        {{- include "label-generator" . | nindent 8 }}
+        app.kubernetes.io/component: {{ .Values.k8s.component }}
     spec:
-{{- if .Values.technicalSecret }}
+      {{- if .Values.technicalSecret.enabled }}
       imagePullSecrets:
-        - name: technical-secret
-{{- end}}
+        - name: {{ .Values.technicalSecret.name | default "technical-secret" }}
+      {{- end }}
+      serviceAccountName: {{ .Values.module }}-{{ .Values.k8s.component }}-sa
       containers:
-        - name: {{ .Values.containers.name }}
-          image: {{ .Values.containers.image }}:{{.Values.containers.tags}}
-{{- if hasSuffix "latest" .Values.containers.tags }}
+        - name: {{ .Values.k8s.component }}
+          image: {{ .Values.containers.image }}:{{ .Values.containers.tags }}
+          {{- if hasSuffix "latest" .Values.containers.tags }}
           imagePullPolicy: Always
-{{- else }}
+          {{- else }}
           imagePullPolicy: IfNotPresent
-{{- end}}
+          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.containers.ports.containerPort }} # Cela doit être le port que votre app écoute
-{{- if .Values.containers.resources }}
+              containerPort: {{ .Values.containers.ports.containerPort }}
+          {{- with .Values.containers.resources }}
           resources:
             requests:
-              memory: {{ .Values.containers.resources.requests.memory }}
-              cpu: {{ .Values.containers.resources.requests.cpu }}
+              memory: {{ .requests.memory }}
+              cpu: {{ .requests.cpu }}
             limits:
-              memory: {{ .Values.containers.resources.limits.memory  }}
-              cpu: {{  .Values.containers.resources.limits.cpu }}
-{{- end }}
+              memory: {{ .limits.memory }}
+              cpu: {{ .limits.cpu }}
+          {{- end }}

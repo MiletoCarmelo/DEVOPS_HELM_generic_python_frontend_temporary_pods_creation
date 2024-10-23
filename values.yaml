@@ -3,30 +3,59 @@ module: temp-pod-manager
 replicas: 1
 
 ingress:
-  enabled: true  # Changed from 'enable' to 'enabled' for consistency
+  enabled: true
+  className: nginx
+  host: myhost
   metadata:
     annotations:
-      pathRewrite: /
-      annotations: {}
-  # tls:
-  #   enabled: true
-  #   annotations:
-  #     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-  # host: myhost  # Moved this out of 'hosts' array for simplicity
+      nginx.ingress.kubernetes.io/rewrite-target: /
   spec:
     path: /
     pathType: Prefix
-  className: nginx
-
+  tls:
+    enabled: true
+    secretName: secret-https
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
 
 containers:
-  image: ""         # À définir dans les values spécifiques
+  name: pod-manager
+  image: bitnami/kubectl:latest
   tags: latest
+  command: /scripts/pod-manager.sh
   ports:
     containerPort: 80 # This should be the port your app listens on (http : 80, https : 443)
+  volumeMounts:
+    name: pod-manager-scripts
+    mountPath: /scripts
+    readOnly: true
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
 
 service:
   enabled: true
   type: ClusterIP
   port: 80
   targetPort: 80
+
+technicalSecret:
+  enabled: false
+  name: technical-secret
+
+podManager:
+  enabled: true
+  ttl: 1800           # 30 minutes de TTL pour les pods temporaires
+  rbac:
+    rules:
+      # Personnaliser les règles si nécessaire
+      - apiGroups: [""]
+        resources: ["pods", "services"]
+        verbs: ["create", "delete", "get", "list"]
+
+k8s: 
+  component: pod-manager

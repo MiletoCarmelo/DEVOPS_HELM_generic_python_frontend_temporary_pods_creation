@@ -1,0 +1,13 @@
+generic-chart/
+├── Chart.yaml
+├── values.yaml
+├── scripts/
+│   └── pod-manager.sh    # Script externe
+└── templates/
+    ├── _helpers.tpl
+    ├── deployment.yaml
+    ├── service.yaml
+    ├── ingress.yaml
+    ├── pod-manager-configmap.yaml
+    ├── pod-manager-deployment.yaml
+    └── pod-manager-rbac.yaml

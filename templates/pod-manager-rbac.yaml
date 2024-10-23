@@ -1,0 +1,50 @@
+# templates/pod-manager-rbac.yaml
+{{- if .Values.podManager.enabled }}
+# ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.module }}-{{ .Values.k8s.component }}-sa
+  labels:
+    {{- include "label-generator" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.k8s.component }}
+
+---
+# Role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Values.module }}-{{ .Values.k8s.component }}-role
+  labels:
+    {{- include "label-generator" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.k8s.component }}  # Utiliser la variable au lieu de "pod-manager"
+rules:
+  {{- with .Values.podManager.rbac.rules }}
+  {{- toYaml . | nindent 2 }}
+  {{- else }}
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/exec", "pods/portforward"]
+    verbs: ["create", "get"]
+  {{- end }}
+
+---
+# RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Values.module }}-{{ .Values.k8s.component }}-rolebinding
+  labels:
+    {{- include "label-generator" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.k8s.component }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.module }}-{{ .Values.k8s.component }}-sa  # Doit correspondre au nom du ServiceAccount
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ .Values.module }}-{{ .Values.k8s.component }}-role
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

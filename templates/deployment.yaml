@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.module }}-{{ .Values.k8s.component }}-deployment
+  name: {{ .Values.module }}-deployment
   labels:
     {{- include "label-generator" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.k8s.component }}
@@ -11,11 +11,11 @@ spec:
   replicas: {{ .Values.replicas | default 1 }}
   selector:
     matchLabels:
-      app: {{ .Values.module }}-{{ .Values.k8s.component }}-pod
+      app: {{ .Values.module }}-pod
   template:
     metadata:
       labels:
-        app: {{ .Values.module }}-{{ .Values.k8s.component }}-pod
+        app: {{ .Values.module }}-pod
         {{- include "label-generator" . | nindent 8 }}
         app.kubernetes.io/component: {{ .Values.k8s.component }}
     spec:
@@ -23,7 +23,7 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.technicalSecret.name | default "technical-secret" }}
       {{- end }}
-      serviceAccountName: {{ .Values.module }}-{{ .Values.k8s.component }}-sa
+      serviceAccountName: {{ .Values.module }}-sa
       containers:
         - name: {{ .Values.k8s.component }}
           image: {{ .Values.containers.image }}:{{ .Values.containers.tags }}

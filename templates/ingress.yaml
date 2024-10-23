@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "label-generator" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.k8s.component }}
-  name: {{ .Values.module }}-{{ .Values.k8s.component }}-ingress
+  name: {{ .Values.module }}-ingress
   annotations:
     {{- toYaml .Values.ingress.metadata.annotations | nindent 4 }}
     {{- if .Values.ingress.tls }}
@@ -29,7 +29,7 @@ spec:
             pathType: {{ .Values.ingress.spec.pathType | default "Prefix" }}
             backend:
               service:
-                name: {{ .Values.module }}-{{ .Values.k8s.component }}-service
+                name: {{ .Values.module }}-service
                 port:
                   name: http
     {{- else }}
@@ -39,7 +39,7 @@ spec:
             pathType: {{ .Values.ingress.spec.pathType | default "Prefix" }}
             backend:
               service:
-                name: {{ .Values.module }}-{{ .Values.k8s.component }}-service
+                name: {{ .Values.module }}-service
                 port:
                   name: http
     {{- end }}

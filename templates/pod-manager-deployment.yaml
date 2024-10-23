@@ -5,18 +5,18 @@ kind: Deployment
 metadata:
   labels:
     {{-  include "label-generator" . | nindent 4 }}
-  name: {{ .Values.module }}-{{ .Values.k8s.component }}-deployment
+  name: {{ .Values.module }}-deployment
 spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.module }}-{{ .Values.k8s.component }}-pod
+      app: {{ .Values.module }}-pod
   template:
     metadata:
       labels:
-        app: {{ .Values.module }}-{{ .Values.k8s.component }}-pod
+        app: {{ .Values.module }}-pod
     spec:
-      serviceAccountName: {{ .Values.module }}-{{ .Values.k8s.component }}-sa
+      serviceAccountName: {{ .Values.module }}-sa
 {{- if .Values.technicalSecret }}
       imagePullSecrets:
         - name: technical-secret
@@ -61,7 +61,7 @@ spec:
       volumes:
         - name: {{ .Values.containers.volumeMounts.name }}
           configMap:
-            name: {{ .Values.module }}-{{ .Values.k8s.component }}-scripts
+            name: {{ .Values.module }}-scripts
             defaultMode: 0755
 {{- end }}
 {{- if .Values.containers.resources }}

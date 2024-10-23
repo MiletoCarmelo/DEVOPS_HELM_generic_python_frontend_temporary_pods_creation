@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.module }}-{{ .Values.k8s.component }}-scripts
+  name: {{ .Values.module }}-scripts
 data:
   # Le script est maintenant copié depuis le fichier externe lors du déploiement
   pod-manager.sh: |-

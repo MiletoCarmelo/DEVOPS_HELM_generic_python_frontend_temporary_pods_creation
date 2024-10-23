@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ .Values.module }}-{{ .Values.k8s.component }}-sa
+  name: {{ .Values.module }}-sa
   labels:
     {{- include "label-generator" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.k8s.component }}
@@ -14,7 +14,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ .Values.module }}-{{ .Values.k8s.component }}-role
+  name: {{ .Values.module }}-role
   labels:
     {{- include "label-generator" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.k8s.component }}  # Utiliser la variable au lieu de "pod-manager"
@@ -35,16 +35,16 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ .Values.module }}-{{ .Values.k8s.component }}-rolebinding
+  name: {{ .Values.module }}-rolebinding
   labels:
     {{- include "label-generator" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.k8s.component }}
 subjects:
   - kind: ServiceAccount
-    name: {{ .Values.module }}-{{ .Values.k8s.component }}-sa  # Doit correspondre au nom du ServiceAccount
+    name: {{ .Values.module }}-sa  # Doit correspondre au nom du ServiceAccount
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
-  name: {{ .Values.module }}-{{ .Values.k8s.component }}-role
+  name: {{ .Values.module }}-role
   apiGroup: rbac.authorization.k8s.io
 {{- end }}

@@ -1,0 +1,30 @@
+module: temp-pods-manager
+
+replicas: 1
+
+ingress:
+  enabled: true  # Changed from 'enable' to 'enabled' for consistency
+  metadata:
+    annotations:
+      pathRewrite: /
+      annotations: {}
+  # tls:
+  #   enabled: true
+  #   annotations:
+  #     cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  # host: myhost  # Moved this out of 'hosts' array for simplicity
+  spec:
+    path: /
+    pathType: Prefix
+  className: nginx
+
+
+containers:
+  ports:
+    containerPort: 80 # This should be the port your app listens on (http : 80, https : 443)
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+  targetPort: 80

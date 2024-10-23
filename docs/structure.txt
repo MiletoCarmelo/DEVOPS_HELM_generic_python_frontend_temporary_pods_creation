@@ -8,6 +8,5 @@ generic-chart/
     ├── deployment.yaml
     ├── service.yaml
     ├── ingress.yaml
-    ├── pod-manager-configmap.yaml
-    ├── pod-manager-deployment.yaml
-    └── pod-manager-rbac.yaml
+    ├── configmap.yaml
+    └── rbac.yaml

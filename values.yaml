@@ -56,6 +56,3 @@ podManager:
       - apiGroups: [""]
         resources: ["pods", "services"]
         verbs: ["create", "delete", "get", "list"]
-
-k8s: 
-  component: pod-manager

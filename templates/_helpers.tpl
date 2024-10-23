@@ -9,7 +9,7 @@ helm.sh/chart: {{ .Chart.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-app.kubernetes.io/component: {{ .Values.k8s.component }}  # Simplifié
+app.kubernetes.io/component: frontend-python-{{.Values.module}}
 {{- else -}}
 {{- fail "La valeur .Values.module est requise" -}}
 {{- end -}}

@@ -6,7 +6,6 @@ metadata:
   name: {{ .Values.module }}-service
   labels:
     {{- include "label-generator" . | nindent 4 }}
-    app.kubernetes.io/component: {{ .Values.k8s.component }}
 spec:
   type: {{ .Values.service.type | default "ClusterIP" }}
   ports:

@@ -6,7 +6,6 @@ metadata:
   name: {{ .Values.module }}-deployment
   labels:
     {{- include "label-generator" . | nindent 4 }}
-    app.kubernetes.io/component: {{ .Values.k8s.component }}
 spec:
   replicas: {{ .Values.replicas | default 1 }}
   selector:
@@ -17,7 +16,6 @@ spec:
       labels:
         app: {{ .Values.module }}-pod
         {{- include "label-generator" . | nindent 8 }}
-        app.kubernetes.io/component: {{ .Values.k8s.component }}
     spec:
       {{- if .Values.technicalSecret.enabled }}
       imagePullSecrets:
@@ -25,7 +23,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ .Values.module }}-sa
       containers:
-        - name: {{ .Values.k8s.component }}
+        - name: {{ .Values.containers.name }}
           image: {{ .Values.containers.image }}:{{ .Values.containers.tags }}
           {{- if hasSuffix "latest" .Values.containers.tags }}
           imagePullPolicy: Always

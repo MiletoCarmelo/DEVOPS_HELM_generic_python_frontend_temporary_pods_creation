@@ -7,7 +7,6 @@ metadata:
   name: {{ .Values.module }}-sa
   labels:
     {{- include "label-generator" . | nindent 4 }}
-    app.kubernetes.io/component: {{ .Values.k8s.component }}
 
 ---
 # Role
@@ -17,7 +16,6 @@ metadata:
   name: {{ .Values.module }}-role
   labels:
     {{- include "label-generator" . | nindent 4 }}
-    app.kubernetes.io/component: {{ .Values.k8s.component }}  # Utiliser la variable au lieu de "pod-manager"
 rules:
   {{- with .Values.podManager.rbac.rules }}
   {{- toYaml . | nindent 2 }}
@@ -38,7 +36,6 @@ metadata:
   name: {{ .Values.module }}-rolebinding
   labels:
     {{- include "label-generator" . | nindent 4 }}
-    app.kubernetes.io/component: {{ .Values.k8s.component }}
 subjects:
   - kind: ServiceAccount
     name: {{ .Values.module }}-sa  # Doit correspondre au nom du ServiceAccount

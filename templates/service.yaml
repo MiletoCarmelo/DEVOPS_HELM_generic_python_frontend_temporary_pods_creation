@@ -1,5 +1,5 @@
 # templates/service.yaml
-{{- if not .Values.podManager.enabled }}
+{{- if and .Values.service.enabled (not .Values.podManager.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:

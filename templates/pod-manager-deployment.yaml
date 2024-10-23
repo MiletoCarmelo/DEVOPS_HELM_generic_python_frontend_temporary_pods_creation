@@ -1,5 +1,5 @@
 # templates/pod-manager-deployment.yaml
-{{- if .Values.podManager.enabled }}
+{{- if and .Values.service.enabled .Values.podManager.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

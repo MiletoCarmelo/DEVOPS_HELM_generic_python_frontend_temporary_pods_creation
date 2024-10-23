@@ -1,4 +1,5 @@
 # templates/deployment.yaml
+{{- if not .Values.podManager.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -43,3 +44,4 @@ spec:
               memory: {{ .limits.memory }}
               cpu: {{ .limits.cpu }}
           {{- end }}
+{{- end}}

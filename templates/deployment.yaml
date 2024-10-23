@@ -29,7 +29,7 @@ spec:
           imagePullPolicy: IfNotPresent
           {{- end }}
           {{- if .Values.podManager.enabled }}
-          # command: 
+          command: 
           #   {{- toYaml .Values.containers.command | nindent 12 }}
           env:
             - name: NAMESPACE

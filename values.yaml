@@ -20,7 +20,7 @@ ingress:
 
 
 containers:
-  image: ghcr.io/miletocarmelo/pods-manager
+  image: ""         # À définir dans les values spécifiques
   tags: latest
   ports:
     containerPort: 80 # This should be the port your app listens on (http : 80, https : 443)

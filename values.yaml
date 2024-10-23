@@ -20,7 +20,7 @@ ingress:
 
 containers:
   name: pod-manager
-  image: bitnami/kubectl:latest
+  image: bitnami/kubectl
   tags: latest
   command: ["sh", "/scripts/pod-manager.sh"]
   ports:

@@ -1,4 +1,4 @@
-# templates/pod-manager-configmap.yaml
+# templates/configmap.yaml
 {{- if .Values.podManager.enabled }}
 apiVersion: v1
 kind: ConfigMap

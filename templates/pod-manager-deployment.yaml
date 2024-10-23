@@ -5,7 +5,7 @@ kind: Deployment
 metadata:
   labels:
     {{-  include "label-generator" . | nindent 4 }}
-  name: {{ .Values.module }}-deployment
+  name: {{ .Values.module }}--pod-manager-deployment
 spec:
   replicas: {{ .Values.replicas }}
   selector:

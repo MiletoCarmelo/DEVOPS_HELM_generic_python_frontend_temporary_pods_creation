@@ -1,9 +1,9 @@
 # templates/pod-manager-service.yaml
-{{- if and .Values.service.enabled .Values.podManager.enabled }}
+{{- if and .Values.service.enabled .Values.podManager.enabled }}  # Important!
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.module }}-service
+  name: {{ .Values.module }}-pod-manager-service
   labels:
     {{- include "label-generator" . | nindent 4 }}
 spec:

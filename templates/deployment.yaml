@@ -30,7 +30,9 @@ spec:
           {{- end }}
           {{- if .Values.podManager.enabled }}
           {{- if .Values.containers.command }}
-          command: {{ .Values.containers.command }}
+          command: 
+           - {{ .Values.containers.command.shell | default "bash" }}
+           - {{ .Values.containers.command.script | default "/scripts/pod-manager.sh" }}
           {{- end }}
           env:
             - name: NAMESPACE

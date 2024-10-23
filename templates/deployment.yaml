@@ -10,11 +10,11 @@ spec:
   replicas: {{ .Values.replicas | default 1 }}
   selector:
     matchLabels:
-      app: {{ .Values.module }}-{{ .Values.k8s.component }}-pods
+      app: {{ .Values.module }}-{{ .Values.k8s.component }}-pod
   template:
     metadata:
       labels:
-        app: {{ .Values.module }}-{{ .Values.k8s.component }}-pods
+        app: {{ .Values.module }}-{{ .Values.k8s.component }}-pod
         {{- include "label-generator" . | nindent 8 }}
         app.kubernetes.io/component: {{ .Values.k8s.component }}
     spec:

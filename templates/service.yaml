@@ -15,5 +15,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ .Values.module }}-{{ .Values.k8s.component }}-pods
+    app: {{ .Values.module }}-{{ .Values.k8s.component }}-pod
 {{- end }}

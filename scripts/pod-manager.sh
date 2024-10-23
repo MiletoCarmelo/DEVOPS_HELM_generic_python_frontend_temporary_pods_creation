@@ -18,7 +18,7 @@ create_temp_pod() {
     # Créer le pod temporaire
     kubectl run $POD_NAME \
         --image=$CONTAINER_IMAGE:$CONTAINER_TAG \
-        --labels="temp=true,app=$MODULE_NAME-$COMPONENT-pods"
+        --labels="temp=true,app=$MODULE_NAME-$COMPONENT-pod"
         --port=$CONTAINER_PORT \
         -n $NAMESPACE
     

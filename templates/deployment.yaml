@@ -31,7 +31,8 @@ spec:
           {{- if .Values.podManager.enabled }}
           {{- if .Values.containers.command }}
           command: 
-            {{- toYaml .Values.containers.command | nindent 12 }}
+          - {{ .Values.containers.commandArgs.shell }}
+          - {{ .Values.containers.commandArgs.script }}
           {{- end }}
           env:
             - name: NAMESPACE

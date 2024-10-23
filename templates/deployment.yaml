@@ -1,54 +1,10 @@
 # templates/deployment.yaml
-{{- if not .Values.podManager.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.module }}-deployment
   labels:
     {{- include "label-generator" . | nindent 4 }}
-spec:
-  replicas: {{ .Values.replicas | default 1 }}
-  selector:
-    matchLabels:
-      app: {{ .Values.module }}-pod
-  template:
-    metadata:
-      labels:
-        app: {{ .Values.module }}-pod
-        {{- include "label-generator" . | nindent 8 }}
-    spec:
-      {{- if .Values.technicalSecret.enabled }}
-      imagePullSecrets:
-        - name: {{ .Values.technicalSecret.name | default "technical-secret" }}
-      {{- end }}
-      serviceAccountName: {{ .Values.module }}-sa
-      containers:
-        - name: {{ .Values.containers.name }}
-          image: {{ .Values.containers.image }}:{{ .Values.containers.tags }}
-          {{- if hasSuffix "latest" .Values.containers.tags }}
-          imagePullPolicy: Always
-          {{- else }}
-          imagePullPolicy: IfNotPresent
-          {{- end }}
-          ports:
-            - name: http
-              containerPort: {{ .Values.containers.ports.containerPort }}
-          {{- with .Values.containers.resources }}
-          resources:
-            requests:
-              memory: {{ .requests.memory }}
-              cpu: {{ .requests.cpu }}
-            limits:
-              memory: {{ .limits.memory }}
-              cpu: {{ .limits.cpu }}
-          {{- end }}
-{{- else}}
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    {{-  include "label-generator" . | nindent 4 }}
-  name: {{ .Values.module }}-pod-manager-deployment
+  name: {{ .Values.module }}-deployment
 spec:
   replicas: {{ .Values.replicas }}
   selector:
@@ -60,21 +16,22 @@ spec:
         app: {{ .Values.module }}-pod
     spec:
       serviceAccountName: {{ .Values.module }}-sa
-{{- if .Values.technicalSecret.enabled }}
+      {{- if .Values.technicalSecret.enabled }}  # Ajout de .enabled
       imagePullSecrets:
         - name: technical-secret
-{{- end}}
+      {{- end }}
       containers:
         - name: {{ .Values.containers.name }}
           image: {{ .Values.containers.image }}:{{.Values.containers.tags}}
-{{- if hasSuffix "latest" .Values.containers.tags }}
+          {{- if hasSuffix "latest" .Values.containers.tags }}
           imagePullPolicy: Always
-{{- else }}
+          {{- else }}
           imagePullPolicy: IfNotPresent
-{{- end}}
-{{- if .Values.containers.command }}
+          {{- end }}
+          {{- if .Values.podManager.enabled }}
+          {{- if .Values.containers.command }}
           command: {{ .Values.containers.command }}
-{{- end }}
+          {{- end }}
           env:
             - name: NAMESPACE
               valueFrom:
@@ -90,30 +47,29 @@ spec:
               value: "{{ .Values.containers.ports.containerPort }}"
             - name: POD_TTL
               value: "{{ .Values.podManager.ttl | default 3600 }}"
-          ports:
-            - name: http
-              containerPort: {{ .Values.containers.ports.containerPort }} # Cela doit être le port que votre app écoute
-{{- if .Values.containers.volumeMounts }}
+          {{- if .Values.containers.volumeMounts }}
           volumeMounts:
-            - name: {{ .Values.containers.volumeMounts.name}}
+            - name: {{ .Values.containers.volumeMounts.name }}
               mountPath: {{ .Values.containers.volumeMounts.mountPath }}
               readOnly: {{ .Values.containers.volumeMounts.readOnly }}
-{{- end }}
-
-{{- if .Values.containers.volumeMounts }}
+          {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containers.ports.containerPort }}
+          {{- if .Values.containers.resources }}
+          resources:
+            requests:
+              memory: {{ .Values.containers.resources.requests.memory }}
+              cpu: {{ .Values.containers.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.containers.resources.limits.memory }}
+              cpu: {{ .Values.containers.resources.limits.cpu }}
+          {{- end }}
+      {{- if and .Values.containers.volumeMounts .Values.podManager.enabled }}
       volumes:
         - name: {{ .Values.containers.volumeMounts.name }}
           configMap:
             name: {{ .Values.module }}-scripts
             defaultMode: 0755
-{{- end }}
-{{- if .Values.containers.resources }}
-          resources:  # Attention à l'indentation
-            requests:
-              memory: {{ .Values.containers.resources.requests.memory }}
-              cpu: {{ .Values.containers.resources.requests.cpu }}
-            limits:
-              memory: {{ .Values.containers.resources.limits.memory  }}
-              cpu: {{  .Values.containers.resources.limits.cpu }}
-{{- end }}
-{{- end }}
+      {{- end }}

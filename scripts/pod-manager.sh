@@ -10,7 +10,7 @@ CONTAINER_TAG=${CONTAINER_TAG:-"latest"}
 CONTAINER_PORT=${CONTAINER_PORT:-80}
 POD_TTL=${POD_TTL:-3600}
 
-# Fonction de création et gestion des pods
+# Fonction de création et gestion des pod
 create_temp_pod() {
     # Créer un nom unique pour le pod
     POD_NAME="$MODULE_NAME-$(date +%s)"

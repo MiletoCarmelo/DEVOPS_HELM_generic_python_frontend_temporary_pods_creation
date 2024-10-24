@@ -44,9 +44,12 @@ create_temp_pod() {
 
 # Boucle principale
 while true; do
-    socat TCP-LISTEN:8080,fork - | while read request; do
+    nc -l 8080 | while read request; do
         if echo "$request" | grep -q "GET / HTTP/1.1"; then
+            # Créer le pod et obtenir le nom du service
             SERVICE_NAME=$(create_temp_pod)
+            
+            # Répondre avec une redirection vers le nouveau service
             echo -e "HTTP/1.1 307 Temporary Redirect\r\nLocation: http://$SERVICE_NAME\r\n\r\n"
         fi
     done

@@ -8,7 +8,7 @@ helm.sh/chart: {{ .Chart.Name | trunc 32 }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/instance: {{ .Release.Name | trunc 32 }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-app.kubernetes.io/component: frontend-python-{{.Values.module | trunc 32 }}
+app.kubernetes.io/component: {{.Values.module | trunc 32 }}
 {{- else -}}
 {{- fail "La valeur .Values.module est requise" -}}
 {{- end -}}

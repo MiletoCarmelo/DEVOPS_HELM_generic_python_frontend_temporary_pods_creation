@@ -1,5 +1,7 @@
 module: "generic-python-front-temp-pod"
 
+name: "generic-python-front-temp-pod"
+
 replicas: 1
 
 ingress:

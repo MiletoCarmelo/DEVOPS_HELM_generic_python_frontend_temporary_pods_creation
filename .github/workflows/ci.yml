@@ -10,7 +10,7 @@ env:
   REGISTRY_NAME: ghcr.io
   REGISTRY_USERNAME: ${{ github.actor }}
   REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-  IMAGE_NAME: pod-manager  # This will be in the format "owner/repo"
+  IMAGE_NAME: ${{ github.repository_owner }}/pod-manager  # Correction de owner
   IMAGE_TAG: latest
 
 permissions:

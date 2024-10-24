@@ -1,4 +1,4 @@
-module: tsa-pod
+module: ""
 
 replicas: 1
 

@@ -29,16 +29,11 @@ spec:
           {{- end }}
           {{- if .Values.podManager.enabled }}
           {{- if .Values.containers.command }}
-          command:
-            {{- range .Values.containers.command }}
-            - {{ . }}
-            {{- end }}
+          command: ["{{ .Values.containers.commandName }}"]
           {{- end}}
           {{- if .Values.containers.args}}
           args:
-            {{- range .Values.containers.args }}
-            - {{ . }}
-            {{- end }}
+            {{- toYaml .Values.containers.argsCommand | nindent 12 }}
           {{- end}}
           env:
             - name: NAMESPACE

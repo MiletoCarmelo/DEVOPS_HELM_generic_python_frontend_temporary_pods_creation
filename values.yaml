@@ -22,9 +22,8 @@ containers:
   name: pod-manager
   image: bitnami/kubectl
   tags: latest
-  command:
-    - bash
-  args:
+  commandName: "bash"
+  argsCommand:
     - "-c"
     - "source /scripts/pod-manager.sh"
   ports:

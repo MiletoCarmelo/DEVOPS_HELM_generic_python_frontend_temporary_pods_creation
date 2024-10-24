@@ -27,8 +27,7 @@ containers:
   command: 
     - bash
   args:
-    - -c
-    - /scripts/pod-manager.sh
+    - ./scripts/pod-manager.sh
   ports:
     containerPort: 80 # This should be the port your app listens on (http : 80, https : 443)
   volumeMounts:

@@ -3,13 +3,13 @@ entries:
   generic-python-frontend-temp-pod:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-10-24T10:08:07.597675622Z"
+    created: "2024-10-24T10:13:02.447874093Z"
     description: A Helm chart for kubernetes - Generic python frontend - Temporary
       pod with port forwarding
-    digest: 1d76f744cee98ef4c3e215cfdbf0e74ffe2d18e195dc6b27712a5eda303cb2bd
+    digest: 34ce3c8662e6381dc1ad0bee1a49894a19a1ef2be1112c0709834457dcd93710
     name: generic-python-frontend-temp-pod
     type: application
     urls:
     - https://raw.githubusercontent.com/MiletoCarmelo/DEVOPS_HELM_generic_python_frontend_temporary_pods_creation/github-pages/generic-python-frontend-temp-pod-0.1.0.tgz
     version: 0.1.0
-generated: "2024-10-24T10:08:07.59568683Z"
+generated: "2024-10-24T10:13:02.446472301Z"

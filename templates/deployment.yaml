@@ -29,8 +29,18 @@ spec:
           imagePullPolicy: IfNotPresent
           {{- end }}
           {{- if .Values.podManager.enabled }}
-          command: 
-          #   {{- toYaml .Values.containers.command | nindent 12 }}
+          {{- if .Values.containers.command}}
+          command:
+          {{- range .Values.containers.command }}
+            - {{ .Values.containers.command }}
+          {{- end }}
+          {{- end}}
+          {{- if .Values.containers.args}}
+          args:
+          {{- range .Values.containers.args }}
+            - {{ . }}
+          {{- end }}
+          {{- end}}
           env:
             - name: NAMESPACE
               valueFrom:

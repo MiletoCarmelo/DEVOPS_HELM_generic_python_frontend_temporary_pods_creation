@@ -20,6 +20,31 @@ spec:
         - name: technical-secret
       {{- end }}
       containers:
+
+        - name: pod-manager
+          image: {{ .Values.podManager.image }}:{{ .Values.podManager.tag }}
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MODULE_NAME
+              value: {{ .Values.module | quote }}
+            - name: CONTAINER_IMAGE
+              value: {{ .Values.containers.image | quote }}
+            - name: CONTAINER_TAG
+              value: {{ .Values.containers.tags | quote }}
+            - name: CONTAINER_PORT
+              value: {{ .Values.containers.ports.containerPort | quote }}
+            - name: POD_TTL
+              value: {{ .Values.containers.config.ttl | quote }}
+          ports:
+            - containerPort: {{ .Values.podManager.ports.containerPort }}
+              name: http
+          resources:
+            {{- toYaml .Values.podManager.resources | nindent 12 }}
+
+
         - name: {{ .Values.containers.name }}
           image: {{ .Values.containers.image }}:{{.Values.containers.tags}}
           {{- if hasSuffix "latest" .Values.containers.tags }}

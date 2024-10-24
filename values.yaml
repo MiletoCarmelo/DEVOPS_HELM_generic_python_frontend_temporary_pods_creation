@@ -1,4 +1,4 @@
-module: ""
+module: "generic-python-front-temp-pod"
 
 replicas: 1
 

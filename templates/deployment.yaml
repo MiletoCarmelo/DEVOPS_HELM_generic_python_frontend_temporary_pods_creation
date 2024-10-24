@@ -1,4 +1,3 @@
-# templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +15,7 @@ spec:
         app: {{ .Values.module }}-pod
     spec:
       serviceAccountName: {{ .Values.module }}-sa
-      {{- if .Values.technicalSecret.enabled }}  # Ajout de .enabled
+      {{- if .Values.technicalSecret.enabled }}
       imagePullSecrets:
         - name: technical-secret
       {{- end }}
@@ -29,17 +28,17 @@ spec:
           imagePullPolicy: IfNotPresent
           {{- end }}
           {{- if .Values.podManager.enabled }}
-          {{- if .Values.containers.command}}
+          {{- if .Values.containers.command }}
           command:
-          {{- range .Values.containers.command }}
+            {{- range .Values.containers.command }}
             - {{ . }}
-          {{- end }}
+            {{- end }}
           {{- end}}
           {{- if .Values.containers.args}}
           args:
-          {{- range .Values.containers.args }}
+            {{- range .Values.containers.args }}
             - {{ . }}
-          {{- end }}
+            {{- end }}
           {{- end}}
           env:
             - name: NAMESPACE

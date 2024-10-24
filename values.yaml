@@ -24,6 +24,7 @@ containers:
   name: pod-manager
   image: bitnami/kubectl
   tags: latest
+  command: null
   # commandName: "bash"
   # argsCommand:
   #   - "-c"

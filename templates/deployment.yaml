@@ -29,6 +29,15 @@ spec:
           {{- end }}
           {{- if .Values.podManager.enabled }}
           {{- if .Values.containers.volumeMounts }}
+          {{- if .Values.containers.command }}
+          command: {{ .Values.containers.command }}
+          {{- end }}
+          {{- if .Values.containers.args }}
+          args:
+            {{- range .Values.containers.args }}
+            - {{ . }}
+            {{- end }}
+          {{- end }}
           volumeMounts:
             - name: {{ .Values.containers.volumeMounts.name }}
               mountPath: {{ .Values.containers.volumeMounts.mountPath }}

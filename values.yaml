@@ -1,4 +1,4 @@
-module: temp-pod-manager
+module: tsa-pod
 
 replicas: 1
 

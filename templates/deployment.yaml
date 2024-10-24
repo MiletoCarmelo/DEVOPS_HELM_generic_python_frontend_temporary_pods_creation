@@ -32,7 +32,7 @@ spec:
           {{- if .Values.containers.command}}
           command:
           {{- range .Values.containers.command }}
-            - {{ .Values.containers.command }}
+            - {{ . }}
           {{- end }}
           {{- end}}
           {{- if .Values.containers.args}}

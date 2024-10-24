@@ -30,7 +30,8 @@ spec:
           {{- if .Values.podManager.enabled }}
           {{- if .Values.containers.volumeMounts }}
           {{- if .Values.containers.command }}
-          command: {{ .Values.containers.command }}
+          command: 
+            {{ .Values.containers.command }}
           {{- end }}
           {{- if .Values.containers.args }}
           args:

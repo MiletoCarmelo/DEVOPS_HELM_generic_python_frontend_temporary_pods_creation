@@ -37,7 +37,7 @@ spec:
             - name: CONTAINER_PORT
               value: {{ .Values.containers.ports.containerPort | quote }}
             - name: POD_TTL
-              value: {{ .Values.containers.config.ttl | quote }}
+              value: {{ .Values.podManager.config.ttl | quote }}
           ports:
             - containerPort: {{ .Values.podManager.ports.containerPort }}
               name: http

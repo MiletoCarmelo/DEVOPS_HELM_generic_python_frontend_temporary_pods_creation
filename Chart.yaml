@@ -1,6 +1,6 @@
 apiVersion: v2
-name: generic-python-frontend-temp-pod
-description: A Helm chart for kubernetes - Generic python frontend - Temporary pod with port forwarding
+name: generic-python-frontend
+description: A Helm chart for kubernetes - Generic python frontend
 
 # A chart can be either an 'application' or a 'library' chart.
 #

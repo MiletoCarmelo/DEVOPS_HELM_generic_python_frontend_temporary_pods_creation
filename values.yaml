@@ -1,75 +1,30 @@
-module: "generic-python-front-temp-pod"
-
-name: "generic-python-front-temp-pod"
+module: pod-manager
 
 replicas: 1
 
-ingress:
-  enabled: true
-  className: nginx
-  host: myhost
-  metadata:
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /
-  spec:
-    path: /
-    pathType: Prefix
-  tls:
-    enabled: true
-    secretName: secret-https
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
 
 containers:
-  name: pod-manager
-  image: bitnami/kubectl
+  image: ghcr.io/miletocarmelo/pod-manager
+  name: python-frontend  # This should match the name in your deployment template
   tags: latest
-  command: 
-    - bash
-  args:
-    - /scripts/pod-manager.sh
   ports:
     containerPort: 80 # This should be the port your app listens on (http : 80, https : 443)
-  volumeMounts:
-    name: pod-manager-scripts
-    mountPath: /scripts
-    readOnly: true
-  resources:
-    requests:
-      memory: "1Gi"
-      cpu: "500m"
-    limits:
-      memory: "2Gi"
-      cpu: "1000m"
 
 service:
-  enabled: true
   type: ClusterIP
   port: 80
   targetPort: 80
 
-technicalSecret:
-  enabled: false
-  name: technical-secret
-
-podManager:
-  enabled: true
-  image: ghcr.io/MiletoCarmelo/pod-manager
-  tag: latest
-  ports:
-    containerPort: 80
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 250m
-      memory: 256Mi
-  config:
-    ttl: 1800           # 30 minutes de TTL pour les pods temporaires
-  rbac:
-    rules:
-      # Personnaliser les règles si nécessaire
-      - apiGroups: [""]
-        resources: ["pods", "services"]
-        verbs: ["create", "delete", "get", "list"]
+ingress:
+  enabled: true  # Changed from 'enable' to 'enabled' for consistency
+  metadata:
+    annotations:
+      pathRewrite: /
+  # tls:
+  #   enabled: true
+  #   annotations:
+  #     cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  # host: myhost  # Moved this out of 'hosts' array for simplicity
+  spec:
+    path: /
+    pathType: Prefix

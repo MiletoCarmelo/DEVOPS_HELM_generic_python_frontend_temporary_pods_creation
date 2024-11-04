@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    {{- include "label-generator" . | nindent 4 }}
+    {{-  include "label-generator" . | nindent 4 }}
   name: {{ .Values.module }}-deployment
 spec:
   replicas: {{ .Values.replicas }}
@@ -14,78 +14,27 @@ spec:
       labels:
         app: {{ .Values.module }}-pod
     spec:
-      serviceAccountName: {{ .Values.module }}-sa
-      {{- if .Values.technicalSecret.enabled }}
+{{- if .Values.technicalSecret }}
       imagePullSecrets:
         - name: technical-secret
-      {{- end }}
+{{- end}}
       containers:
-
-        - name: pod-manager
-          image: {{ .Values.podManager.image }}:{{ .Values.podManager.tag }}
-          env:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: MODULE_NAME
-              value: {{ .Values.module | quote }}
-            - name: CONTAINER_IMAGE
-              value: {{ .Values.containers.image | quote }}
-            - name: CONTAINER_TAG
-              value: {{ .Values.containers.tags | quote }}
-            - name: CONTAINER_PORT
-              value: {{ .Values.containers.ports.containerPort | quote }}
-            - name: POD_TTL
-              value: {{ .Values.podManager.config.ttl | quote }}
-          ports:
-            - containerPort: {{ .Values.podManager.ports.containerPort }}
-              name: http
-          resources:
-            {{- toYaml .Values.podManager.resources | nindent 12 }}
-
-
         - name: {{ .Values.containers.name }}
           image: {{ .Values.containers.image }}:{{.Values.containers.tags}}
-          {{- if hasSuffix "latest" .Values.containers.tags }}
+{{- if hasSuffix "latest" .Values.containers.tags }}
           imagePullPolicy: Always
-          {{- else }}
+{{- else }}
           imagePullPolicy: IfNotPresent
-          {{- end }}
-          {{- if .Values.podManager.enabled }}
-          {{- if .Values.containers.volumeMounts }}
-          {{- if .Values.containers.command }}
-          command: 
-            {{ .Values.containers.command }}
-          {{- end }}
-          {{- if .Values.containers.args }}
-          args:
-            {{- range .Values.containers.args }}
-            - {{ . }}
-            {{- end }}
-          {{- end }}
-          volumeMounts:
-            - name: {{ .Values.containers.volumeMounts.name }}
-              mountPath: {{ .Values.containers.volumeMounts.mountPath }}
-              readOnly: {{ .Values.containers.volumeMounts.readOnly }}
-          {{- end }}
-          {{- end }}
+{{- end}}
           ports:
             - name: http
-              containerPort: {{ .Values.containers.ports.containerPort }}
-          {{- if .Values.containers.resources }}
+              containerPort: {{ .Values.containers.ports.containerPort }} # Cela doit être le port que votre app écoute
+{{- if .Values.containers.resources }}
           resources:
             requests:
               memory: {{ .Values.containers.resources.requests.memory }}
               cpu: {{ .Values.containers.resources.requests.cpu }}
             limits:
-              memory: {{ .Values.containers.resources.limits.memory }}
-              cpu: {{ .Values.containers.resources.limits.cpu }}
-          {{- end }}
-      {{- if and .Values.containers.volumeMounts .Values.podManager.enabled }}
-      volumes:
-        - name: {{ .Values.containers.volumeMounts.name }}
-          configMap:
-            name: {{ .Values.module }}-scripts
-            defaultMode: 0755
-      {{- end }}
+              memory: {{ .Values.containers.resources.limits.memory  }}
+              cpu: {{  .Values.containers.resources.limits.cpu }}
+{{- end }}
